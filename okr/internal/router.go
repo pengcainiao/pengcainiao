@@ -2,8 +2,11 @@ package internal
 
 import (
 	"context"
+	"github.com/pengcainiao/pengcainiao/okr/internal/middleware"
+	"github.com/pengcainiao/pengcainiao/okr/internal/v1/api"
 	"github.com/pengcainiao/zero/core/logx"
 	"github.com/pengcainiao/zero/rest"
+	"github.com/pengcainiao/zero/rest/httprouter"
 	"github.com/rs/zerolog/log"
 	"net/http"
 	"os"
@@ -30,6 +33,17 @@ func Setup() {
 func setupHTTPServer() *http.Server {
 
 	router := rest.NewGinServer()
+	router.Use(httprouter.Recovery())
+	router.Use(middleware.Cors())
+
+	v1 := router.Group("/v1")
+	{
+		var (
+			objective api.ObjectiveController
+		)
+
+		v1.GET("test", objective.First)
+	}
 
 	srv := &http.Server{
 		Addr:         ":8080",
