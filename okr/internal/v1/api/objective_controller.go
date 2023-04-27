@@ -1,9 +1,9 @@
 package api
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/pengcainiao/pengcainiao/okr/internal/v1/services"
+	"github.com/pengcainiao/zero/rest/httprouter"
 )
 
 type ObjectiveController struct {
@@ -16,9 +16,18 @@ type ObjectiveController struct {
 // @Security ApiKeyAuth
 // @accept json
 // @Produce json
+// @Param   keyword     query       string                  false   "任务ID, 多个用逗号隔开"
 // @Success 200 {object} httprouter.Response
 // @Failure 400 {object} httprouter.Response
-// @Router /v2/task [post]
+// @Router /v2/test [get]
 func (o ObjectiveController) First(c *gin.Context) {
-	fmt.Println("11111111")
+	keyword := c.Query("keyword")
+	if keyword == "" {
+		httprouter.ResponseJSONContent(c, httprouter.Success(map[string]interface{}{
+			"data": "空值",
+		}))
+	}
+	httprouter.ResponseJSONContent(c, httprouter.Success(map[string]interface{}{
+		"data": keyword,
+	}))
 }
