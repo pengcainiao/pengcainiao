@@ -2,9 +2,11 @@ module github.com/pengcainiao/pengcainiao
 
 go 1.17
 
-require github.com/rs/zerolog v1.29.1
-
-require github.com/pengcainiao/zero v1.1.6
+require (
+	github.com/gin-gonic/gin v1.9.0
+	github.com/pengcainiao/zero v1.1.6
+	github.com/rs/zerolog v1.29.1
+)
 
 require (
 	github.com/963204765/httpclient v0.0.0-20201210072243-522af3cdfe83 // indirect
@@ -13,7 +15,6 @@ require (
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
-	github.com/gin-gonic/gin v1.9.0 // indirect
 	github.com/go-logr/logr v1.2.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
