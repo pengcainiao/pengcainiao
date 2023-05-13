@@ -2,12 +2,12 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/pengcainiao/pengcainiao/okr/internal/v1/services"
+	"github.com/pengcainiao/pengcainiao/internal/services"
 	"github.com/pengcainiao/zero/rest/httprouter"
 )
 
-type ObjectiveController struct {
-	service services.ObjectiveServices
+type UserController struct {
+	service services.UserServices
 }
 
 // First 测试
@@ -20,14 +20,14 @@ type ObjectiveController struct {
 // @Success 200 {object} httprouter.Response
 // @Failure 400 {object} httprouter.Response
 // @Router /v2/test [get]
-func (o ObjectiveController) First(c *gin.Context) {
+func (o UserController) First(c *gin.Context) {
 	keyword := c.Query("keyword")
 	if keyword == "" {
 		httprouter.ResponseJSONContent(c, httprouter.Success(map[string]interface{}{
-			"data": "okr" + "空值",
+			"data": "user:" + "空值",
 		}))
 	}
 	httprouter.ResponseJSONContent(c, httprouter.Success(map[string]interface{}{
-		"data": "okr" + keyword,
+		"data": "user:" + keyword,
 	}))
 }
