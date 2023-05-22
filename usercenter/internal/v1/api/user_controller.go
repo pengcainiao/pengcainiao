@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/pengcainiao/pengcainiao/internal/services"
+	"github.com/pengcainiao/pengcainiao/usercenter/internal/services"
 	"github.com/pengcainiao/zero/rest/httprouter"
 )
 

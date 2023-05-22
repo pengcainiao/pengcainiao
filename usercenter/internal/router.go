@@ -2,8 +2,9 @@ package internal
 
 import (
 	"context"
-	"github.com/pengcainiao/pengcainiao/internal/middleware"
-	"github.com/pengcainiao/pengcainiao/internal/v1/api"
+	"github.com/pengcainiao/pengcainiao/usercenter/internal/middleware"
+	"github.com/pengcainiao/pengcainiao/usercenter/internal/v1/api"
+
 	"github.com/pengcainiao/zero/core/logx"
 	"github.com/pengcainiao/zero/rest"
 	"github.com/pengcainiao/zero/rest/httprouter"
@@ -39,10 +40,13 @@ func setupHTTPServer() *http.Server {
 	v1 := router.Group("/v1")
 	{
 		var (
-			user api.UserController
+			user      api.UserController
+			accountV2 = api.NewAccountController()
 		)
 
 		v1.GET("test", user.First)
+		v1.GET("/user/verify", accountV2.VerifyAccessibleHandler) // 校验用户信息
+
 	}
 
 	srv := &http.Server{
