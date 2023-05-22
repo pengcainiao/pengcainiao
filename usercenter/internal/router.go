@@ -2,8 +2,10 @@ package internal
 
 import (
 	"context"
-	"github.com/pengcainiao/pengcainiao/usercenter/internal/middleware"
+	middlewares "github.com/pengcainiao/pengcainiao/usercenter/internal/middleware"
 	"github.com/pengcainiao/pengcainiao/usercenter/internal/v1/api"
+
+	"github.com/gin-contrib/cors"
 
 	"github.com/pengcainiao/zero/core/logx"
 	"github.com/pengcainiao/zero/rest"
@@ -17,9 +19,9 @@ import (
 )
 
 // Setup 开启服务
-// @title 飞项核心业务API文档
+// @title 用户中心API文档
 // @version 1.0
-// @description 飞项核心业务API文档
+// @description 用户中心API文档
 // @schemes http https
 // @host 127.0.0.1:8080
 // @securityDefinitions.apikey ApiKeyAuth
@@ -34,18 +36,32 @@ func Setup() {
 func setupHTTPServer() *http.Server {
 
 	router := rest.NewGinServer()
-	router.Use(httprouter.Recovery())
-	router.Use(middleware.Cors())
+
+	router.Use(cors.New(cors.Config{
+		AllowAllOrigins:  true,
+		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
+		AllowHeaders:     []string{"Authorization", "Content-Type", "Origin", "Content-Length"},
+		ExposeHeaders:    []string{"Content-Length", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Content-Type"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
+
+	router.Use(
+		httprouter.Recovery(),
+		middlewares.TokenVerify(),
+	)
 
 	v1 := router.Group("/v1")
 	{
 		var (
-			user      api.UserController
-			accountV2 = api.NewAccountController()
+			user    api.UserController
+			account = api.NewAccountController()
 		)
 
 		v1.GET("test", user.First)
-		v1.GET("/user/verify", accountV2.VerifyAccessibleHandler) // 校验用户信息
+		v1.POST("/auth/login", user.RegisterAndLogin)        // 注册登录
+
+		v1.GET("/user/verify", account.VerifyAccessibleHandler) // 校验用户信息
 
 	}
 
