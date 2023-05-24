@@ -31,7 +31,7 @@ func newRouter() *router {
 }
 
 func (r *router) init() {
-	r.addRoute(http.MethodPost, "/:version/auth/pc")             //Deprecated
+	r.addRoute(http.MethodPost, "/:version/user/register")             //Deprecated
 }
 
 
