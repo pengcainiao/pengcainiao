@@ -34,18 +34,18 @@ func (u UserController) First(c *gin.Context) {
 	}))
 }
 
-// RegisterAndLogin
-// @Summary 注册登录
-// @Description 注册登录
+// RegisterUser
+// @Summary 注册
+// @Description 注册
 // @Tags user（用户管理）
 // @accept json
 // @Produce json
-// @Param   body            body        form.RegisterAndLoginRequest        true    "json数据"
+// @Param   body            body        form.RegisterUserRequest        true    "json数据"
 // @Success 200 {object} httprouter.Response  "用户对象"
 // @Failure 400 {object} httprouter.Response
-// @Router /v2/auth/phonelogin [post]
-func (u UserController)RegisterAndLogin(c *gin.Context)  {
-	var params form.RegisterAndLoginRequest
+// @Router /v2/user/register [post]
+func (u UserController) RegisterUser(c *gin.Context) {
+	var params form.RegisterUserRequest
 	if err := c.ShouldBind(&params); err != nil {
 		httprouter.ResponseJSONContent(c, httprouter.ErrorSame(
 			httprouter.ErrInvalidParameterCode,
@@ -53,6 +53,33 @@ func (u UserController)RegisterAndLogin(c *gin.Context)  {
 		))
 		return
 	}
-	res:=u.service.RegisterAndLogin(httprouter.NewContext(c),params)
-	httprouter.ResponseJSONContent(c,res)
+
+	u.service.UserID = c.GetString("user_id")
+	res := u.service.RegisterUser(httprouter.NewContext(c), params)
+	httprouter.ResponseJSONContent(c, res)
+}
+
+// UserLogin
+// @Summary 登陆
+// @Description 登陆
+// @Tags user（用户管理）
+// @accept json
+// @Produce json
+// @Param   body            body        form.LoginRequest        true    "json数据"
+// @Success 200 {object} httprouter.Response  "用户对象"
+// @Failure 400 {object} httprouter.Response
+// @Router /v2/user/login [post]
+func (u UserController) UserLogin(c *gin.Context) {
+	var params form.LoginRequest
+	if err := c.ShouldBind(&params); err != nil {
+		httprouter.ResponseJSONContent(c, httprouter.ErrorSame(
+			httprouter.ErrInvalidParameterCode,
+			validator.NewValidator().Translate(err),
+		))
+		return
+	}
+
+	u.service.UserID = c.GetString("user_id")
+	res := u.service.UserLogin(httprouter.NewContext(c), params)
+	httprouter.ResponseJSONContent(c, res)
 }

@@ -59,9 +59,10 @@ func setupHTTPServer() *http.Server {
 		)
 
 		v1.GET("test", user.First)
-		v1.POST("/auth/login", user.RegisterAndLogin)        // 注册登录
+		v1.POST("/user/register", user.RegisterUser) // 注册
+		v1.POST("/user/login", user.UserLogin) // 登陆
 
-		v1.GET("/user/verify", account.VerifyAccessibleHandler) // 校验用户信息
+		v1.GET("/auth/verify", account.VerifyAccessibleHandler) // 校验用户信息
 
 	}
 
