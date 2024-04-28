@@ -43,6 +43,7 @@ func setupHTTPServer() *http.Server {
 		)
 
 		v1.GET("test", objective.First)
+		v1.GET("gongzhu", objective.GongZhu)
 	}
 
 	srv := &http.Server{

@@ -31,3 +31,19 @@ func (o ObjectiveController) First(c *gin.Context) {
 		"data": keyword,
 	}))
 }
+
+// First 测试
+// @Summary 测试
+// @Tags 测试（任务）
+// @Security ApiKeyAuth
+// @accept json
+// @Produce json
+// @Param   keyword     query       string                  false   "任务ID, 多个用逗号隔开"
+// @Success 200 {object} httprouter.Response
+// @Failure 400 {object} httprouter.Response
+// @Router /v2/test [get]
+func (o ObjectiveController) GongZhu(c *gin.Context) {
+	httprouter.ResponseJSONContent(c, httprouter.Success(map[string]interface{}{
+		"data": "https://oversea-test-666.oss-ap-southeast-1.aliyuncs.com/feishu/FkibeHZXlBTfRQV9I29YSbppvEHd.jpeg",
+	}))
+}
