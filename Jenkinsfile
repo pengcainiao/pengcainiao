@@ -1,67 +1,75 @@
+#!/usr/bin/env groovy
+ 
+def registry = "http://119.29.5.54:1180/"
+def project = "library"
+def Branch = "main"
+def app_name = "okr"
+def image_name = "${registry}/${project}/${app_name}:${Branch}-${BUILD_NUMBER}"
+def git_address = "https://gitlab.com/a16624741591/server.git"
+def docker_registry_auth = "a4ef0fc8-fcad-4859-8a90-1d390a74d7da"
+def git_auth = "d090072a-cfaa-4858-b192-197161849d18"
+
 pipeline {
     agent any
-
-    environment {
-        // 设置环境变量，如Docker镜像名、GitLab仓库地址等
-        DOCKER_IMAGE = 'your-docker-repo/your-image-name'
-        GITLAB_REPO = 'https://gitlab.com/a16624741591/server.git'
-        // 从Jenkins凭证中获取GitLab的凭证ID
-        GIT_CREDENTIALS_ID = '11326794'
+        environment {
+        _VERSION = sh(script: "echo `date '+%Y%m%d-%H%M%S'`", returnStdout: true).trim()
     }
-
     stages {
-
-        stage('Clone Repository') {
+        stage('拉取代码'){
             steps {
-                git branch: 'main', credentialsId: env.GIT_CREDENTIALS_ID, url: env.GITLAB_REPO
+                sh 'cd $WORKSPACE'
+                sh 'mkdir -p server'
+                sh 'cd server'
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://gitlab.com/a16624741591/server.git']]])
+                echo 'git ok'
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    // 构建Docker镜像
-                    docker.build(env.DOCKER_IMAGE, '-f ci/Dockerfile .')
+
+
+        stage('构建镜像'){
+           steps {
+                withCredentials([usernamePassword(credentialsId: "${docker_registry_auth}", passwordVariable: 'plh12345', usernameVariable: 'admin')]) {
+                sh '''
+                  echo '
+                    FROM golang:1.17-alpine3.13 AS builder
+                    WORKDIR /usr/src/app
+                    ENV GO111MODULE=on
+                    #RUN adduser -u 10001 -D app-runner
+
+                    ENV GOPROXY https://goproxy.cn
+                    COPY ..  .
+                    RUN go env
+                    #RUN go mod download
+                    COPY ../.. .
+                    #CMD ["tail", "-f", "/dev/null"]
+                    RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -a -o server ./okr/cmd
+                    FROM alpine:3.12 AS final
+
+                    WORKDIR /app
+                    #COPY --from=builder /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+                    COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+                    COPY --from=builder /usr/src/app/server /opt/app/
+                    #USER app-runner
+                    CMD ["/opt/app/server"]
+                  ' > Dockerfile
+                '''
+                sh 'docker build -t 119.29.5.54:1180/library/okr:t${_VERSION} .'
+                sh 'docker login -u admin -p plh12345 http://119.29.5.54:1180/'
+                sh 'docker push 119.29.5.54:1180/library/okr:t${_VERSION}'
                 }
-            }
+           }
         }
 
-        stage('Run Tests') {
-            steps {
-                script {
-                    // 假设在Dockerfile中有一个指定默认的ENTRYPOINT，执行测试
-                    docker.image(env.DOCKER_IMAGE).inside {
-                        sh 'go test ./...'
-                    }
-                }
+        stage('登录服务器pull'){
+            steps{
+                sh '''
+                ssh -tt root@119.29.5.54 <<EOF
+                   docker run 119.29.5.54:1180/library/okr:t${_VERSION}
+                   exit
+                '''
+                echo 'pull ok'
             }
-        }
-
-        stage('Push Docker Image') {
-            when {
-                branch 'main'
-            }
-            steps {
-                script {
-                    withDockerRegistry([credentialsId: 'docker-credentials-id', url: '']) {
-                        docker.image(env.DOCKER_IMAGE).push()
-                    }
-                }
-            }
-        }
-
-        // 这里可以添加更多的stage，例如部署到Kubernetes，通知等
-    }
-
-    post {
-        always {
-            cleanWs()
-        }
-        success {
-            echo 'Pipeline completed successfully'
-        }
-        failure {
-            echo 'Pipeline failed'
         }
     }
 }

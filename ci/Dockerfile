@@ -18,3 +18,4 @@ COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /usr/src/app/server /opt/app/
 #USER app-runner
 CMD ["/opt/app/server"]
+
