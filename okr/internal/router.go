@@ -47,7 +47,7 @@ func setupHTTPServer() *http.Server {
 	}
 
 	srv := &http.Server{
-		Addr:         ":8080",
+		Addr:         ":8085",
 		Handler:      router,
 		ReadTimeout:  time.Second * 20,
 		WriteTimeout: time.Second * 20,
