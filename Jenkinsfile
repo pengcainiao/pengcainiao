@@ -20,8 +20,7 @@ pipeline {
                 sh 'cd $WORKSPACE'
                 sh 'mkdir -p server'
                 sh 'cd server'
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://gitlab.com/a16624741591/server.git']]])
-                echo 'git ok'
+                checkout([$class: 'GitSCM', branches: [[name: '${SERVER}']], userRemoteConfigs: [[url: 'https://gitlab.com/a16624741591/server.git']]])
             }
         }
 
@@ -35,14 +34,11 @@ pipeline {
                     FROM golang:1.17-alpine3.13 AS builder
                     WORKDIR /usr/src/app
                     ENV GO111MODULE=on
-                    #RUN adduser -u 10001 -D app-runner
 
                     ENV GOPROXY https://goproxy.cn
                     COPY ..  .
                     RUN go env
-                    #RUN go mod download
                     COPY ../.. .
-                    #CMD ["tail", "-f", "/dev/null"]
                     RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -a -o server ./okr/cmd
                     FROM alpine:3.12 AS final
 
@@ -51,10 +47,10 @@ pipeline {
                     COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
                     COPY --from=builder /usr/src/app/server /opt/app/
                     #USER app-runner
-                    CMD ["/opt/app/server"]
+                    CMD ["/opt/app/cmd"]
                   ' > Dockerfile
                 '''
-                sh 'docker build -t 119.29.5.54:1180/library/okr:t${_VERSION} .'
+                sh 'docker build --platform linux/amd64 -t 119.29.5.54:1180/library/okr:t${_VERSION} .'
                 sh 'docker login -u admin -p plh12345 http://119.29.5.54:1180/'
                 sh 'docker push 119.29.5.54:1180/library/okr:t${_VERSION}'
                 }
@@ -65,7 +61,8 @@ pipeline {
             steps{
                 sh '''
                 ssh -tt root@119.29.5.54 <<EOF
-                   docker run 119.29.5.54:1180/library/okr:t${_VERSION}
+                   ./check_containers.sh "t${_VERSION}"
+                   docker run -d -p 8085:8085 119.29.5.54:1180/library/okr:t${_VERSION}
                    exit
                 '''
                 echo 'pull ok'

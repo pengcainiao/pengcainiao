@@ -2,8 +2,8 @@ package internal
 
 import (
 	"context"
-	"github.com/pengcainiao/pengcainiao/okr/internal/middleware"
-	"github.com/pengcainiao/pengcainiao/okr/internal/v1/api"
+	"github.com/pengcainiao/pengcainiao/usercenter/internal/middleware"
+	"github.com/pengcainiao/pengcainiao/usercenter/internal/v1/api"
 	"github.com/pengcainiao/zero/core/logx"
 	"github.com/pengcainiao/zero/rest"
 	"github.com/pengcainiao/zero/rest/httprouter"
@@ -44,7 +44,6 @@ func setupHTTPServer() *http.Server {
 
 		v1.GET("test", objective.First)
 		v1.GET("gongzhu", objective.GongZhu)
-		v1.GET("redis", objective.TestRedis)
 	}
 
 	srv := &http.Server{

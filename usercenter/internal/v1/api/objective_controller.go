@@ -2,10 +2,8 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/pengcainiao/pengcainiao/okr/internal/v1/services"
-	"github.com/pengcainiao/zero/core/logx"
+	"github.com/pengcainiao/pengcainiao/usercenter/internal/v1/services"
 	"github.com/pengcainiao/zero/rest/httprouter"
-	"github.com/pengcainiao/zero/tools/syncer"
 )
 
 type ObjectiveController struct {
@@ -47,16 +45,5 @@ func (o ObjectiveController) First(c *gin.Context) {
 func (o ObjectiveController) GongZhu(c *gin.Context) {
 	httprouter.ResponseJSONContent(c, httprouter.Success(map[string]interface{}{
 		"data": "https://oversea-test-666.oss-ap-southeast-1.aliyuncs.com/feishu/FkibeHZXlBTfRQV9I29YSbppvEHd.jpeg",
-	}))
-}
-func (o ObjectiveController) TestRedis(c *gin.Context) {
-	res, err := syncer.Redis().Get(c, "test").Result()
-	if err != nil {
-		logx.NewTraceLogger(c).Err(err).Msg("TestRedis fail")
-		return
-	}
-
-	httprouter.ResponseJSONContent(c, httprouter.Success(map[string]interface{}{
-		"data": res,
 	}))
 }
