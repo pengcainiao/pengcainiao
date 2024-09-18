@@ -14,7 +14,8 @@ type Okr struct {
 
 // TestTry s
 func TestTry(t *testing.T) {
-	env.DbDSN = "penglonghui:Nrtg1X-syTXF@tcp(119.29.5.54:3306)/okr?parseTime=true&charset=utf8mb4&collation=utf8mb4_unicode_ci"
+	fmt.Println(11)
+	env.DbDSN = "penglonghui:Penglonghui!123!@tcp(119.29.5.54:3306)/okr?parseTime=true&charset=utf8mb4&collation=utf8mb4_unicode_ci"
 	//var (
 	//	Ob   Okr
 	//	asql = `select id,name from okr.okr where id = 1`
