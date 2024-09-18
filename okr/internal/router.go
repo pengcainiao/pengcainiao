@@ -43,7 +43,6 @@ func setupHTTPServer() *http.Server {
 		var (
 			objective api.ObjectiveController
 		)
-
 		v1.GET("test", objective.First)
 		v1.GET("gongzhu", objective.GongZhu)
 		v1.GET("redis", objective.TestRedis)
