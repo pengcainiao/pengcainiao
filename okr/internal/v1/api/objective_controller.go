@@ -2,10 +2,10 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/pengcainiao/pengcainiao/okr/internal/v1/services"
-	"github.com/pengcainiao/zero/core/logx"
-	"github.com/pengcainiao/zero/rest/httprouter"
-	"github.com/pengcainiao/zero/tools/syncer"
+	"github.com/pengcainiao2/okr/internal/v1/services"
+	"github.com/pengcainiao2/zero/core/logx"
+	"github.com/pengcainiao2/zero/rest/httprouter"
+	"github.com/pengcainiao2/zero/tools/syncer"
 )
 
 type ObjectiveController struct {
@@ -74,7 +74,7 @@ func (o ObjectiveController) Mysql(c *gin.Context) {
 	)
 	err := syncer.MySQL().Get(c, &Ob, asql)
 	if err != nil {
-		logx.NewTraceLogger(c).Err(err).Msg("Test Mysql fail")
+		logx.NewTraceLogger(c).Err(err).Msg("tests Mysql fail")
 		return
 	}
 

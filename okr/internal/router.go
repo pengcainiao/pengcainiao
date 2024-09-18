@@ -2,12 +2,12 @@ package internal
 
 import (
 	"context"
-	"github.com/pengcainiao/pengcainiao/okr/internal/middleware"
-	"github.com/pengcainiao/pengcainiao/okr/internal/v1/api"
-	"github.com/pengcainiao/zero/core/env"
-	"github.com/pengcainiao/zero/core/logx"
-	"github.com/pengcainiao/zero/rest"
-	"github.com/pengcainiao/zero/rest/httprouter"
+	"github.com/pengcainiao2/okr/internal/middleware"
+	"github.com/pengcainiao2/okr/internal/v1/api"
+	"github.com/pengcainiao2/zero/core/env"
+	"github.com/pengcainiao2/zero/core/logx"
+	"github.com/pengcainiao2/zero/rest"
+	"github.com/pengcainiao2/zero/rest/httprouter"
 	"github.com/rs/zerolog/log"
 	"net/http"
 	"os"

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/pengcainiao/pengcainiao/okr/internal"
-	"github.com/pengcainiao/zero/rest/httprouter"
+	"github.com/pengcainiao2/okr/internal"
+	"github.com/pengcainiao2/zero/rest/httprouter"
 )
 
 func main() {
