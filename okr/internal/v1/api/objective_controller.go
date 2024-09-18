@@ -49,6 +49,7 @@ func (o ObjectiveController) GongZhu(c *gin.Context) {
 		"data": "https://oversea-test-666.oss-ap-southeast-1.aliyuncs.com/feishu/FkibeHZXlBTfRQV9I29YSbppvEHd.jpeg",
 	}))
 }
+
 func (o ObjectiveController) TestRedis(c *gin.Context) {
 	res, err := syncer.Redis().Get(c, "test").Result()
 	if err != nil {
@@ -58,5 +59,26 @@ func (o ObjectiveController) TestRedis(c *gin.Context) {
 
 	httprouter.ResponseJSONContent(c, httprouter.Success(map[string]interface{}{
 		"data": res,
+	}))
+}
+
+type Okr struct {
+	Id   int64  `json:"id" db:"id"`
+	Name string `json:"name" db:"name"`
+}
+
+func (o ObjectiveController) Mysql(c *gin.Context) {
+	var (
+		Ob   Okr
+		asql = `select id,name from okr.okr where id = 1`
+	)
+	err := syncer.MySQL().Get(c, &Ob, asql)
+	if err != nil {
+		logx.NewTraceLogger(c).Err(err).Msg("Test Mysql fail")
+		return
+	}
+
+	httprouter.ResponseJSONContent(c, httprouter.Success(map[string]interface{}{
+		"data": Ob,
 	}))
 }

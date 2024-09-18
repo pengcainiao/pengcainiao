@@ -38,6 +38,7 @@ func setupHTTPServer() *http.Server {
 	router.Use(middleware.Cors())
 	v1 := router.Group("/v1")
 	env.RedisAddr = "127.0.0.1:6379"
+	env.DbDSN = "penglonghui:Nrtg1X-syTXF@tcp(119.29.5.54:3306)/okr?parseTime=true&charset=utf8mb4&collation=utf8mb4_unicode_ci"
 	{
 		var (
 			objective api.ObjectiveController
@@ -46,6 +47,7 @@ func setupHTTPServer() *http.Server {
 		v1.GET("test", objective.First)
 		v1.GET("gongzhu", objective.GongZhu)
 		v1.GET("redis", objective.TestRedis)
+		v1.GET("mysql", objective.Mysql)
 	}
 
 	srv := &http.Server{
