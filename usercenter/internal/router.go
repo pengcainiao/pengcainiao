@@ -2,12 +2,14 @@ package internal
 
 import (
 	"context"
+	"github.com/pengcainiao2/usercenter/internal/grpcsvc"
 	"github.com/pengcainiao2/usercenter/internal/middleware"
 	"github.com/pengcainiao2/usercenter/internal/v1/api"
 	"github.com/pengcainiao2/zero/core/env"
 	"github.com/pengcainiao2/zero/core/logx"
 	"github.com/pengcainiao2/zero/rest"
 	"github.com/pengcainiao2/zero/rest/httprouter"
+	"github.com/pengcainiao2/zero/rpcx/grpcbase"
 	"github.com/rs/zerolog/log"
 	"net/http"
 	"os"
@@ -26,7 +28,7 @@ import (
 // @in header
 // @name Authorization
 func Setup() {
-	//setupGRPCServer()
+	setupGRPCServer()
 	//setupTimerExec()
 	gracefullShutdown(setupHTTPServer())
 }
@@ -70,13 +72,14 @@ func setupHTTPServer() *http.Server {
  * @synopsis setupGRPCServer
  * @return
  */
-//func setupGRPCServer() {
-//	go func() {
-//		if err := grpcbase.RegisterServer(grpcsvc.NewService()); err != nil {
-//			log.Fatal().Err(err).Msg("listen 8084 失败")
-//		}
-//	}()
-//}
+func setupGRPCServer() {
+	go func() {
+		if err := grpcbase.RegisterServer(grpcsvc.NewService()); err != nil {
+			log.Fatal().Err(err).Msg("listen 8084 失败")
+		}
+	}()
+}
+
 /**
  * 启动健康检查
  * @synopsis setupHealthZ
