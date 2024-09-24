@@ -2,7 +2,6 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/pengcainiao2/okr/internal/grpcclient"
 	"github.com/pengcainiao2/okr/internal/v1/services"
 	"github.com/pengcainiao2/zero/core/logx"
 	"github.com/pengcainiao2/zero/rest/httprouter"
@@ -98,13 +97,9 @@ func (o ObjectiveController) GrpcTry(c *gin.Context) {
 			RequestID:     "1",
 		},
 	}
-	user, err := grpcclient.NewUserCenter().GetUser(ctx, params)
-	if err != nil {
-		logx.Infof("GrpcTry rpc fail")
-		return
-	}
-
+	newClient := grpcuc.NewClient()
+	resp := newClient.HandleGetUser(ctx, params)
 	httprouter.ResponseJSONContent(c, httprouter.Success(map[string]interface{}{
-		"data": user,
+		"data": resp.Name,
 	}))
 }
