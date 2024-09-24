@@ -25,6 +25,10 @@ func NewUserCenter() *UserCenterClient {
 
 func (user UserCenterClient) GetUser(ctx *httprouter.Context, params grpcuc.GetUserRequest) (string, error) {
 	log.Println("22222")
+	if user.client == nil {
+		log.Println("123123")
+	}
+
 	resp := user.client.GetUser(ctx, params)
 	if resp.Message != "" {
 		return "", errors.New(resp.Message)
