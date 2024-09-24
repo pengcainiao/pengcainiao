@@ -15,14 +15,16 @@ type UserCenterClient struct {
 func NewUserCenter() *UserCenterClient {
 	c, err := grpcbase.DialClient(grpcbase.ServerAddr(grpcbase.UserCenterSVC))
 	if err != nil {
+		log.Println("NewUserCenter fail")
 		log.Fatal(err)
 	}
 	client := c.(grpcuc.Repository)
+	log.Println("--", client)
 	return &UserCenterClient{client}
 }
 
 func (user UserCenterClient) GetUser(ctx *httprouter.Context, params grpcuc.GetUserRequest) (string, error) {
-
+	log.Println("22222")
 	resp := user.client.GetUser(ctx, params)
 	if resp.Message != "" {
 		return "", errors.New(resp.Message)
