@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/gin-gonic/gin v1.7.7
-	github.com/pengcainiao2/zero v1.1.16
+	github.com/pengcainiao2/zero v1.1.17
 	github.com/rs/zerolog v1.28.0
 )
 
