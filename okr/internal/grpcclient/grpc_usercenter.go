@@ -23,7 +23,6 @@ func NewUserCenter() *UserCenterClient {
 
 func (user UserCenterClient) GetUser(ctx *httprouter.Context, params grpcuc.GetUserRequest) (string, error) {
 
-	injectContext(ctx, params.Context)
 	resp := user.client.GetUser(ctx, params)
 	if resp.Message != "" {
 		return "", errors.New(resp.Message)
