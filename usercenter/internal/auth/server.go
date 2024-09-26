@@ -40,12 +40,19 @@ func New(conf *Config) *Server {
 	conf.JwkPublishPath = "/.well-known/jwks.json"
 	conf.JwkPublishAddr = ":8081"
 	conf.Issuer = "http://penglonghui.cn"
-	conf.AccessToken.TimeToLive = 6 * time.Hour
-	conf.AccessToken.KeysFile = "/etc/secrets/oauth/keys.json"
-	conf.AccessToken.KeysReloadInterval = 1 * time.Minute
-	conf.RefreshToken.TimeToLive = 1440 * time.Hour
-	conf.RefreshToken.Redis.Host = "127.0.0.1"
-	conf.RefreshToken.Redis.Port = 6379
+	conf.AccessToken = &AccessTokenConfig{
+		KeysFile:           "/etc/secrets/oauth/keys.json",
+		KeysReloadInterval: 1 * time.Minute,
+		TimeToLive:         6 * time.Hour,
+	}
+	conf.RefreshToken = &RefreshTokenConfig{
+		Redis: RedisConfig{
+			Host: "127.0.0.1",
+			Port: 6379,
+		},
+		TimeToLive: 1440 * time.Hour,
+	}
+
 	return &Server{conf: conf}
 }
 
