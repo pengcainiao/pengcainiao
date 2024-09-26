@@ -6,7 +6,6 @@ import (
 	"errors"
 	"github.com/google/martian/log"
 	"gopkg.in/square/go-jose.v2"
-	"os"
 	"strconv"
 	"time"
 
@@ -75,7 +74,7 @@ func NewAccessTokenProvider(iss string, conf *AccessTokenConfig) (TokenProvider,
 }
 
 func (p *accessTokenProvider) reloadKeys() error {
-	jwkSet, err := loadKeys(p.conf.KeysFile)
+	jwkSet, err := loadKeys()
 	if err != nil {
 		return err
 	}
@@ -183,17 +182,55 @@ func (p *accessTokenProvider) GetPublicJWKSet(ctx context.Context, keyID string)
 	return jose.JSONWebKeySet{Keys: p.verifyKeySet.Key(keyID)}
 }
 
-func loadKeys(path string) (*jose.JSONWebKeySet, error) {
-	f, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer f.Close()
-
+func loadKeys() (*jose.JSONWebKeySet, error) {
+	//f, err := os.Open(path)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//defer f.Close()
+	//
 	var jwkSet jose.JSONWebKeySet
-	err = json.NewDecoder(f).Decode(&jwkSet)
+	a := `{
+    "keys": [
+        {
+            "kty": "EC",
+            "d": "xJKIH7DMaVFkcbgb83jFU7bfbg11VWbf4Zf80tTNL48",
+            "use": "sig",
+            "crv": "P-256",
+            "kid": "wNtuHu",
+            "x": "tZvCPwbX-EGF4zD6NKZflx9oLAzo0PN-4D4If2YPFwo",
+            "y": "t_ENWTs4-dw8uSMTHZeHj7CNuCkzbm2xQkca1THcUbw",
+            "alg": "ES256"
+        },
+        {
+            "kty": "EC",
+            "d": "PjxuFJvGYncwtAXnKGXFtWblyCVEkc9tKZWxDo_ZxWU",
+            "use": "sig",
+            "crv": "P-256",
+            "kid": "aZG6cP",
+            "x": "GGwe2uJ0gQPt3ToJ32xCjo-s1gT8vcghNaXXv9W7980",
+            "y": "FgVogKmbO7auokiQ1qiySRcgE_Qwq61kGxUpjGinlbI",
+            "alg": "ES256"
+        },
+        {
+            "kty": "EC",
+            "d": "tqJ9fYz337FZrTN_y5qAtqHSaqKIjFIi-L99yE0e8Fo",
+            "use": "sig",
+            "crv": "P-256",
+            "kid": "dtSvcS",
+            "x": "zMFPaN4CYAHANaEybI1I6zFNUd5hWmK_EfHPkgPRirc",
+            "y": "SStsHBFfrbO5VUEMv3OF3SML9fBC-yEwK4oCnYgG0Vk",
+            "alg": "ES256"
+        }
+    ]
+}`
+	err := json.Unmarshal([]byte(a), &jwkSet)
 	if err != nil {
 		return nil, err
 	}
+	//err = json.NewDecoder(f).Decode(&jwkSet)
+	//if err != nil {
+	//	return nil, err
+	//}
 	return &jwkSet, nil
 }
