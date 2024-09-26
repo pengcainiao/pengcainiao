@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/google/martian/log"
+	"github.com/pengcainiao2/zero/core/logx"
 	"time"
 
 	"github.com/go-redis/redis"
@@ -99,6 +100,8 @@ func (p *refreshTokenProvider) GetPublicJWKSet(ctx context.Context, keyID string
 }
 
 func (p *refreshTokenProvider) GrantToken(ctx context.Context, tokenInfo *TokenInfo, ttl time.Duration) (*GrantedToken, error) {
+	logx.NewTraceLogger(ctx).Info().Msg(fmt.Sprintf("222grant token: %d %s %s", tokenInfo.Uid, tokenInfo.DeviceId, ttl))
+
 	token := uuid.NewV4().String()
 	v, _ := json.Marshal(tokenInfo)
 

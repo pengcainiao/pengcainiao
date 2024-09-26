@@ -111,7 +111,7 @@ func (s *ObjectiveController) Login(ctx *gin.Context) {
 		apierror.Fail(ctx, apierror.InvalidParamErr)
 		return
 	}
-	log.Infof("111")
+	logx.NewTraceLogger(ctx).Info().Msg("111")
 	key := fmt.Sprintf("coin_agent_login_%v", in.UserName)
 	if syncer.Redis().Get(ctx, key).Val() == "0" {
 		log.Infof("Get(key).Val() == 0 in:%v", in)
@@ -120,9 +120,10 @@ func (s *ObjectiveController) Login(ctx *gin.Context) {
 	}
 	uid, err := models.AuthenticateCoinAgentUser(ctx, in)
 
-	log.Infof("2222", uid)
+	logx.NewTraceLogger(ctx).Info().Msg(fmt.Sprintf("2222,%v", uid))
+
 	if err != nil || uid == 0 {
-		log.Infof("login fail in:%v", in)
+		logx.NewTraceLogger(ctx).Info().Msg(fmt.Sprintf("login fail in:%v", in))
 		if !syncer.Redis().SetNX(ctx, key, 5, 1*time.Hour).Val() {
 			if syncer.Redis().TTL(ctx, key).Val().Seconds() > 0 {
 				if syncer.Redis().Decr(ctx, key).Val() <= 0 {
@@ -141,18 +142,19 @@ func (s *ObjectiveController) Login(ctx *gin.Context) {
 		apierror.Fail(ctx, apierror.InternalErr)
 		return
 	}
-	log.Infof("3333", uid)
+	logx.NewTraceLogger(ctx).Info().Msg(fmt.Sprintf("3333,%v", uid))
 
 	if detail, ok := resp[uid]; ok {
 		if detail.Banned == 1 {
-			log.Infof("login 賬號被凍結 uid:%v", uid)
+			logx.NewTraceLogger(ctx).Info().Msg(fmt.Sprintf("login 賬號被凍結 uid:%v", uid))
 			apierror.Fail(ctx, apierror.InvalidUser)
 			return
 		}
 	}
 	oauthToken := &auth.TokenInfo{Uid: uid, DeviceId: in.DeviceID}
 	if auth.New(&auth.Config{}) == nil {
-		log.Infof("4444")
+		logx.NewTraceLogger(ctx).Info().Msg(fmt.Sprintf("444"))
+
 	}
 
 	tokens, err := auth.New(&auth.Config{}).GrantTokens(ctx, &auth.GrantTokensRequest{TokenInfo: oauthToken})

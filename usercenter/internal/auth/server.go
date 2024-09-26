@@ -3,7 +3,9 @@ package auth
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/google/martian/log"
+	"github.com/pengcainiao2/zero/core/logx"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"time"
@@ -119,11 +121,12 @@ type TokenInfo struct {
 }
 
 func (s *Server) GrantTokens(ctx context.Context, in *GrantTokensRequest) (out *GrantTokensResponse, err error) {
-	log.Infof("GrantTokens, token info: (%v)", in.TokenInfo)
+	logx.NewTraceLogger(ctx).Info().Msg(fmt.Sprintf("GrantTokens, token info: (%v)", in.TokenInfo))
 
 	out = &GrantTokensResponse{}
 	if s.accessTokenProvider == nil {
-		log.Infof("5555")
+		logx.NewTraceLogger(ctx).Info().Msg(fmt.Sprintf("555"))
+
 	}
 	out.AccessToken, err = s.accessTokenProvider.GrantToken(ctx, in.TokenInfo, s.conf.AccessToken.TimeToLive)
 	if err != nil {

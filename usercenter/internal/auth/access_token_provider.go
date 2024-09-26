@@ -4,7 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/google/martian/log"
+	"github.com/pengcainiao2/zero/core/logx"
 	"gopkg.in/square/go-jose.v2"
 	"strconv"
 	"time"
@@ -94,7 +96,8 @@ func (p *accessTokenProvider) reloadKeys() error {
 }
 
 func (p *accessTokenProvider) GrantToken(ctx context.Context, tokenInfo *TokenInfo, ttl time.Duration) (*GrantedToken, error) {
-	log.Debugf("grant token: %d %s %s", tokenInfo.Uid, tokenInfo.DeviceId, ttl)
+	logx.NewTraceLogger(ctx).Info().Msg(fmt.Sprintf("grant token: %d %s %s", tokenInfo.Uid, tokenInfo.DeviceId, ttl))
+
 	now := time.Now()
 
 	id, err := p.idgen.NextID()
