@@ -41,7 +41,7 @@ func New(conf *Config) *Server {
 	conf.JwkPublishAddr = ":8081"
 	conf.Issuer = "http://penglonghui.cn"
 	conf.AccessToken = &AccessTokenConfig{
-		KeysFile:           "/etc/secrets/oauth/keys.json",
+		KeysFile:           "/keys.json",
 		KeysReloadInterval: 1 * time.Minute,
 		TimeToLive:         6 * time.Hour,
 	}
