@@ -2,8 +2,10 @@ package internal
 
 import (
 	"context"
+	"github.com/pengcainiao2/usercenter/internal/auth"
 	"github.com/pengcainiao2/usercenter/internal/grpcsvc"
 	"github.com/pengcainiao2/usercenter/internal/middleware"
+	v11 "github.com/pengcainiao2/usercenter/internal/v1"
 	"github.com/pengcainiao2/usercenter/internal/v1/api"
 	"github.com/pengcainiao2/zero/core/env"
 	"github.com/pengcainiao2/zero/core/logx"
@@ -34,21 +36,26 @@ func Setup() {
 }
 
 func setupHTTPServer() *http.Server {
-
+	env.RedisAddr = "127.0.0.1:6379"
+	env.DbDSN = "penglonghui:Penglonghui!123!@tcp(119.29.5.54:3306)/okr?parseTime=true&charset=utf8mb4&collation=utf8mb4_unicode_ci"
+	auth.New(&auth.Config{}).Init()
+	v11.SetUp()
 	router := rest.NewGinServer()
 	router.Use(httprouter.Recovery())
 	router.Use(middleware.Cors())
 	v1 := router.Group("/v1")
-	env.RedisAddr = "127.0.0.1:6379"
-	env.DbDSN = "penglonghui:Penglonghui!123!@tcp(119.29.5.54:3306)/okr?parseTime=true&charset=utf8mb4&collation=utf8mb4_unicode_ci"
 	{
 		var (
 			objective api.ObjectiveController
 		)
+		v1.GET("login", objective.Login)
+		v1.Use(middleware.AuthenticatedHandlev2())
+
 		v1.GET("test", objective.First)
 		v1.GET("gongzhu", objective.GongZhu)
 		v1.GET("redis", objective.TestRedis)
 		v1.GET("mysql", objective.Mysql)
+		v1.GET("rpc", objective.Rpc)
 	}
 
 	srv := &http.Server{

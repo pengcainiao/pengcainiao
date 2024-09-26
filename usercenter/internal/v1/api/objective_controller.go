@@ -1,11 +1,19 @@
 package api
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/google/martian/log"
+	"github.com/pengcainiao2/apierror"
+	"github.com/pengcainiao2/usercenter/internal/auth"
+	"github.com/pengcainiao2/usercenter/internal/v1/form"
+	"github.com/pengcainiao2/usercenter/internal/v1/models"
 	"github.com/pengcainiao2/usercenter/internal/v1/services"
 	"github.com/pengcainiao2/zero/core/logx"
 	"github.com/pengcainiao2/zero/rest/httprouter"
+	"github.com/pengcainiao2/zero/rpcx/grpcclient/okr"
 	"github.com/pengcainiao2/zero/tools/syncer"
+	"time"
 )
 
 type ObjectiveController struct {
@@ -81,4 +89,71 @@ func (o ObjectiveController) Mysql(c *gin.Context) {
 	httprouter.ResponseJSONContent(c, httprouter.Success(map[string]interface{}{
 		"data": Ob,
 	}))
+}
+
+func (o ObjectiveController) Rpc(c *gin.Context) {
+	newClient := okr.NewClient()
+	params := okr.GetOkrRequest{}
+	ctx := &httprouter.Context{}
+	resp := newClient.HandleGetOkr(ctx, params)
+
+	httprouter.ResponseJSONContent(c, httprouter.Success(map[string]interface{}{
+		"data": resp.Name,
+	}))
+}
+
+func (s *ObjectiveController) Login(ctx *gin.Context) {
+	var (
+		in  form.LoginReq
+		out form.LoginResp
+	)
+	if err := ctx.BindJSON(&in); err != nil {
+		apierror.Fail(ctx, apierror.InvalidParamErr)
+		return
+	}
+
+	key := fmt.Sprintf("coin_agent_login_%v", in.UserName)
+	if syncer.Redis().Get(ctx, key).Val() == "0" {
+		log.Infof("Get(key).Val() == 0 in:%v", in)
+		apierror.Fail(ctx, apierror.LoginTimesOneHourLimitFErr)
+		return
+	}
+	uid, err := models.AuthenticateCoinAgentUser(ctx, in)
+
+	if err != nil || uid == 0 {
+		log.Infof("login fail in:%v", in)
+		if !syncer.Redis().SetNX(ctx, key, 5, 1*time.Hour).Val() {
+			if syncer.Redis().TTL(ctx, key).Val().Seconds() > 0 {
+				if syncer.Redis().Decr(ctx, key).Val() <= 0 {
+					apierror.Fail(ctx, apierror.LoginTimesOneHourLimitFErr)
+					return
+				}
+			}
+		}
+		apierror.Fail(ctx, apierror.InvalidUserErr)
+		return
+	}
+
+	resp, err := models.GetAgentUsersInfo(ctx, []uint64{uid})
+	if err != nil {
+		log.Errorf("login GetAgentUsersInfo fail err:%v", err)
+		apierror.Fail(ctx, apierror.InternalErr)
+		return
+	}
+
+	if detail, ok := resp[uid]; ok {
+		if detail.Banned == 1 {
+			log.Infof("login 賬號被凍結 uid:%v", uid)
+			apierror.Fail(ctx, apierror.InvalidUser)
+			return
+		}
+	}
+	oauthToken := &auth.TokenInfo{Uid: uid, DeviceId: in.DeviceID}
+	tokens, err := auth.New(&auth.Config{}).GrantTokens(ctx, &auth.GrantTokensRequest{TokenInfo: oauthToken})
+	out.RefreshToken = tokens.RefreshToken.Token
+	out.RefreshTokenExpiresIn = tokens.RefreshToken.ExpiresIn
+	out.AssessToken = tokens.AccessToken.Token
+	out.AssessTokenExpiresIn = tokens.AccessToken.ExpiresIn
+	out.Uid = uid
+	apierror.Success(ctx, out)
 }
