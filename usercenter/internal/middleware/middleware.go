@@ -61,7 +61,7 @@ func AuthenticatedFromGinContext(c *gin.Context) {
 	reqPath := c.Request.URL.Path[24:]
 	token := c.Request.Header.Get("token")
 	// todo
-	tokenInfo, err := auth.New(&auth.Config{}).ValidateToken(c, &auth.ValidateTokenRequest{
+	tokenInfo, err := auth.GlobalServer.ValidateToken(c, &auth.ValidateTokenRequest{
 		Type:  auth.TokenType_ACCESS_TOKEN,
 		Token: token,
 	})

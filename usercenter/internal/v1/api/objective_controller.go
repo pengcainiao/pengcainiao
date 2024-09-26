@@ -156,8 +156,7 @@ func (s *ObjectiveController) Login(ctx *gin.Context) {
 		logx.NewTraceLogger(ctx).Info().Msg(fmt.Sprintf("444"))
 
 	}
-
-	tokens, err := auth.New(&auth.Config{}).GrantTokens(ctx, &auth.GrantTokensRequest{TokenInfo: oauthToken})
+	tokens, err := auth.GlobalServer.GrantTokens(ctx, &auth.GrantTokensRequest{TokenInfo: oauthToken})
 	out.RefreshToken = tokens.RefreshToken.Token
 	out.RefreshTokenExpiresIn = tokens.RefreshToken.ExpiresIn
 	out.AssessToken = tokens.AccessToken.Token

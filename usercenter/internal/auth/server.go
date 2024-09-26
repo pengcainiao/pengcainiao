@@ -20,6 +20,8 @@ type Server struct {
 	refreshTokenProvider TokenProvider
 }
 
+var GlobalServer *Server
+
 func New(conf *Config) *Server {
 	//listen: :8080
 	//logLevel: debug
@@ -91,7 +93,7 @@ func (s *Server) Init() error {
 		}
 		log.Infof("serveJWKPublisher: %v", err)
 	}()
-
+	GlobalServer = s
 	return nil
 }
 
