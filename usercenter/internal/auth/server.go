@@ -119,9 +119,12 @@ type TokenInfo struct {
 }
 
 func (s *Server) GrantTokens(ctx context.Context, in *GrantTokensRequest) (out *GrantTokensResponse, err error) {
-	log.Debugf("GrantTokens, token info: (%v)", in.TokenInfo)
+	log.Infof("GrantTokens, token info: (%v)", in.TokenInfo)
 
 	out = &GrantTokensResponse{}
+	if s.accessTokenProvider == nil {
+		log.Infof("5555")
+	}
 	out.AccessToken, err = s.accessTokenProvider.GrantToken(ctx, in.TokenInfo, s.conf.AccessToken.TimeToLive)
 	if err != nil {
 		return nil, err

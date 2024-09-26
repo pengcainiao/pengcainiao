@@ -2,6 +2,7 @@ package internal
 
 import (
 	"context"
+	"fmt"
 	"github.com/pengcainiao2/usercenter/internal/auth"
 	"github.com/pengcainiao2/usercenter/internal/auth/adapter/mysql"
 	"github.com/pengcainiao2/usercenter/internal/grpcsvc"
@@ -39,7 +40,10 @@ func Setup() {
 func setupHTTPServer() *http.Server {
 	env.RedisAddr = "127.0.0.1:6379"
 	env.DbDSN = "penglonghui:Penglonghui!123!@tcp(119.29.5.54:3306)/okr?parseTime=true&charset=utf8mb4&collation=utf8mb4_unicode_ci"
-	auth.New(&auth.Config{}).Init()
+	err := auth.New(&auth.Config{}).Init()
+	if err != nil {
+		logx.NewTraceLogger(context.Background()).Info().Msg(fmt.Sprintf("init err:%v", err))
+	}
 	mysql.InitAssetsMysql(env.DbDSN, 10)
 
 	v11.SetUp()
