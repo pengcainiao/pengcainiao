@@ -3,6 +3,7 @@ package internal
 import (
 	"context"
 	"github.com/pengcainiao2/usercenter/internal/auth"
+	"github.com/pengcainiao2/usercenter/internal/auth/adapter/mysql"
 	"github.com/pengcainiao2/usercenter/internal/grpcsvc"
 	"github.com/pengcainiao2/usercenter/internal/middleware"
 	v11 "github.com/pengcainiao2/usercenter/internal/v1"
@@ -39,6 +40,8 @@ func setupHTTPServer() *http.Server {
 	env.RedisAddr = "127.0.0.1:6379"
 	env.DbDSN = "penglonghui:Penglonghui!123!@tcp(119.29.5.54:3306)/okr?parseTime=true&charset=utf8mb4&collation=utf8mb4_unicode_ci"
 	auth.New(&auth.Config{}).Init()
+	mysql.InitAssetsMysql(env.DbDSN, 10)
+
 	v11.SetUp()
 	router := rest.NewGinServer()
 	router.Use(httprouter.Recovery())
