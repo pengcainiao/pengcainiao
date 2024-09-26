@@ -67,21 +67,28 @@ func (s *Server) OnConfigChange() {
 }
 
 func (s *Server) Init() error {
-	log.Infof("init: %v", s.conf)
+	logx.NewTraceLogger(context.Background()).Info().Msg(fmt.Sprintf("init begin: %v", s.conf))
+
 	var err error
 
 	s.refreshTokenProvider, err = NewRefreshTokenProvider(s.conf.RefreshToken)
 	if err != nil {
+		logx.NewTraceLogger(context.Background()).Err(err).Msg(fmt.Sprintf("initNewRefreshTokenProvider fail, %v", err))
+
 		return err
 	}
 
 	s.accessTokenProvider, err = NewAccessTokenProvider(s.conf.Issuer, s.conf.AccessToken)
 	if err != nil {
+		logx.NewTraceLogger(context.Background()).Err(err).Msg(fmt.Sprintf("NewAccessTokenProvider fail, %v", err))
 		return err
 	}
 
 	go func() {
 		err := serveJWKPublisher(s.conf.JwkPublishAddr, s.conf.JwkPublishPath, s)
+		if err != nil {
+			logx.NewTraceLogger(context.Background()).Err(err).Msg(fmt.Sprintf("serveJWKPublisher fail, %v", err))
+		}
 		log.Infof("serveJWKPublisher: %v", err)
 	}()
 
