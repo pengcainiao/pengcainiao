@@ -51,7 +51,7 @@ func setupHTTPServer() *http.Server {
 		var (
 			objective api.ObjectiveController
 		)
-		v1.GET("login", objective.Login)
+		v1.POST("login", objective.Login)
 		v1.Use(middleware.AuthenticatedHandlev2())
 
 		v1.GET("test", objective.First)
