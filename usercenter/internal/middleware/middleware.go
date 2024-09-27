@@ -1,12 +1,14 @@
 package middleware
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/martian/log"
 	"github.com/pengcainiao2/apierror"
 	"github.com/pengcainiao2/usercenter/internal/auth"
 	v1 "github.com/pengcainiao2/usercenter/internal/v1"
 	"github.com/pengcainiao2/usercenter/internal/v1/models"
+	"github.com/pengcainiao2/zero/core/logx"
 	"net/http"
 	"strconv"
 )
@@ -58,9 +60,12 @@ type PermissionEnum struct {
 
 func AuthenticatedFromGinContext(c *gin.Context) {
 	//reqMethod := c.Request.Method
+	logx.NewTraceLogger(c).Info().Msg(fmt.Sprintf("AuthenticatedFromGinContext Path %s", c.Request.URL.Path))
 	reqPath := c.Request.URL.Path[24:]
 	token := c.Request.Header.Get("token")
 	// todo
+	logx.NewTraceLogger(c).Info().Msg(fmt.Sprintf("AuthenticatedFromGinContext token %s", token))
+
 	tokenInfo, err := auth.GlobalServer.ValidateToken(c, &auth.ValidateTokenRequest{
 		Type:  auth.TokenType_ACCESS_TOKEN,
 		Token: token,
