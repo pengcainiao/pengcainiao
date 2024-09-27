@@ -61,7 +61,7 @@ type PermissionEnum struct {
 func AuthenticatedFromGinContext(c *gin.Context) {
 	//reqMethod := c.Request.Method
 	logx.NewTraceLogger(c).Info().Msg(fmt.Sprintf("AuthenticatedFromGinContext Path %s", c.Request.URL.Path))
-	reqPath := c.Request.URL.Path[24:]
+	reqPath := c.Request.URL.Path[3:]
 	token := c.Request.Header.Get("token")
 	// todo
 	logx.NewTraceLogger(c).Info().Msg(fmt.Sprintf("AuthenticatedFromGinContext token %s", token))
