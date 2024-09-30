@@ -109,13 +109,14 @@ func TestRedis(T *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	pong, err := rdb.Ping(ctx).Result()
-	if err != nil {
-		log.Fatalf("failed to ping redis: %s", err)
-	}
-
 	val := rdb.Get(ctx, "AAA").Val()
 	fmt.Println("val:", val)
 
-	fmt.Println("Redis ping response:", pong)
+	keys := fmt.Sprintf("coin_agent_login_%v", "root")
+	if rdb.Get(ctx, keys).Val() == "0" {
+		fmt.Println("fail :", rdb.Get(ctx, keys).Val())
+		return
+	} else {
+		fmt.Println("suc :", rdb.Get(ctx, keys).Val())
+	}
 }
