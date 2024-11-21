@@ -5,14 +5,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/google/martian/log"
-	"github.com/pengcainiao2/zero/core/logx"
+	"gitlab.com/a16624741591/zero/core/logx"
 	"time"
 
 	"github.com/go-redis/redis"
 	"github.com/golang/protobuf/proto"
 	uuid "github.com/satori/go.uuid"
 	"github.com/scylladb/go-set/strset"
-	"gopkg.in/square/go-jose.v2"
 )
 
 type RedisConfig struct {

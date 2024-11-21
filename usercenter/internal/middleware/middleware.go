@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/martian/log"
-	"github.com/pengcainiao2/apierror"
-	"github.com/pengcainiao2/usercenter/internal/auth"
-	v1 "github.com/pengcainiao2/usercenter/internal/v1"
-	"github.com/pengcainiao2/usercenter/internal/v1/models"
-	"github.com/pengcainiao2/zero/core/logx"
+	"gitlab.com/a16624741591/zero/core/logx"
 	"net/http"
+	"pp/apierror"
+	"pp/usercenter/internal/auth"
+	v1 "pp/usercenter/internal/v1"
+	"pp/usercenter/internal/v1/models"
 	"strconv"
 )
 

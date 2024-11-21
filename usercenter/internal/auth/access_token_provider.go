@@ -6,8 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/google/martian/log"
-	"github.com/pengcainiao2/zero/core/logx"
-	"gopkg.in/square/go-jose.v2"
+	"gitlab.com/a16624741591/zero/core/logx"
 	"strconv"
 	"time"
 

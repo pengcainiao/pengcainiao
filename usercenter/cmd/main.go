@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/pengcainiao2/usercenter/internal"
-	"github.com/pengcainiao2/zero/rest/httprouter"
+	"gitlab.com/a16624741591/zero/rest/httprouter"
+	"pp/usercenter/internal"
 )
 
 func main() {

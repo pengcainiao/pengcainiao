@@ -2,8 +2,8 @@ package grpcsvc
 
 import (
 	"context"
-	"github.com/pengcainiao2/zero/rpcx/grpcbase"
-	"github.com/pengcainiao2/zero/rpcx/grpcclient/usercenter"
+	"gitlab.com/a16624741591/zero/rpcx/grpcbase"
+	"gitlab.com/a16624741591/zero/rpcx/grpcclient/usercenter"
 )
 
 func NewService() grpcbase.ServerBinding {

@@ -2,11 +2,11 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/pengcainiao2/okr/internal/v1/services"
-	"github.com/pengcainiao2/zero/core/logx"
-	"github.com/pengcainiao2/zero/rest/httprouter"
-	grpcuc "github.com/pengcainiao2/zero/rpcx/grpcclient/usercenter"
-	"github.com/pengcainiao2/zero/tools/syncer"
+	"gitlab.com/a16624741591/zero/core/logx"
+	"gitlab.com/a16624741591/zero/rest/httprouter"
+	grpcuc "gitlab.com/a16624741591/zero/rpcx/grpcclient/usercenter"
+	"gitlab.com/a16624741591/zero/tools/syncer"
+	"pp/okr/internal/v1/services"
 )
 
 type ObjectiveController struct {

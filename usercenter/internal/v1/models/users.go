@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/google/martian/log"
 	"github.com/jmoiron/sqlx"
-	"github.com/pengcainiao2/usercenter/internal/v1/form"
-	"github.com/pengcainiao2/zero/tools/syncer"
+	"gitlab.com/a16624741591/zero/tools/syncer"
+	"pp/usercenter/internal/v1/form"
 	"time"
 )
 

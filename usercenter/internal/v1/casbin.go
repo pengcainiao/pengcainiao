@@ -1,11 +1,10 @@
 package v1
 
 import (
-	"github.com/casbin/casbin/v2"
 	"github.com/casbin/casbin/v2/model"
 	"github.com/google/martian/log"
-	"github.com/pengcainiao2/usercenter/internal/auth/adapter"
 	"go.uber.org/zap"
+	"pp/usercenter/internal/auth/adapter"
 	"sync"
 )
 

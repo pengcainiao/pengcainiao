@@ -2,16 +2,16 @@ package internal
 
 import (
 	"context"
-	"github.com/pengcainiao2/okr/internal/middleware"
-	"github.com/pengcainiao2/okr/internal/v1/api"
-	"github.com/pengcainiao2/zero/core/env"
-	"github.com/pengcainiao2/zero/core/logx"
-	"github.com/pengcainiao2/zero/rest"
-	"github.com/pengcainiao2/zero/rest/httprouter"
 	"github.com/rs/zerolog/log"
+	"gitlab.com/a16624741591/zero/core/env"
+	"gitlab.com/a16624741591/zero/core/logx"
+	"gitlab.com/a16624741591/zero/rest"
+	"gitlab.com/a16624741591/zero/rest/httprouter"
 	"net/http"
 	"os"
 	"os/signal"
+	"pp/okr/internal/middleware"
+	"pp/okr/internal/v1/api"
 	"syscall"
 	"time"
 )

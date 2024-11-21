@@ -2,7 +2,7 @@ package adapter
 
 import (
 	"github.com/casbin/casbin/v2/model"
-	"github.com/pengcainiao2/usercenter/internal/auth/adapter/mysql"
+	"pp/usercenter/internal/auth/adapter/mysql"
 )
 
 type Adapter interface {

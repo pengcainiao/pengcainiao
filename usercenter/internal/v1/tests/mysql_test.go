@@ -2,8 +2,8 @@ package tests
 
 import (
 	"fmt"
-	"github.com/pengcainiao2/zero/core/env"
-	"github.com/pengcainiao2/zero/tools/syncer"
+	"gitlab.com/a16624741591/zero/core/env"
+	"gitlab.com/a16624741591/zero/tools/syncer"
 	"testing"
 )
 
