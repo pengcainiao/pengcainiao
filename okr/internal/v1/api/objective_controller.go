@@ -27,11 +27,11 @@ func (o ObjectiveController) First(c *gin.Context) {
 	keyword := c.Query("keyword")
 	if keyword == "" {
 		httprouter.ResponseJSONContent(c, httprouter.Success(map[string]interface{}{
-			"data": "空值",
+			"data": "空值1",
 		}))
 	}
 	httprouter.ResponseJSONContent(c, httprouter.Success(map[string]interface{}{
-		"data": keyword,
+		"data": keyword + "1",
 	}))
 }
 
