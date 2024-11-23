@@ -1,0 +1,19 @@
+syntax ="proto3";
+package pb ;
+option go_package=".;pb";
+
+import "protos/grpc_base.proto";
+
+
+message GetUserRequest{
+  string Keyword=1 ;
+  UserContext Context = 3;
+}
+
+message GetUserResponse{
+  string Name =1;
+}
+
+service UserCenter{
+  rpc GetUser(GetUserRequest) returns(Response) ;
+}

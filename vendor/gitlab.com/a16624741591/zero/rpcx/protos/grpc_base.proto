@@ -1,0 +1,28 @@
+syntax ="proto3";
+package pb ;
+option go_package=".;pb";
+
+import "google/protobuf/any.proto";
+
+message Response{
+    string Message =1 ;
+    int32 Total=2;
+    google.protobuf.Any Data = 3;
+}
+
+message UserContext{
+    string UserID =1;
+    string Platform =2 ;
+    string ClientVersion =3 ;
+    string Token =4 ;
+    string ClientIP=5 ;
+    string RequestID=6;
+}
+
+message NopResponse{
+
+}
+message Paging{
+    int32 PageNumber =1 ;
+    int32 PageRecord =2 ;
+}

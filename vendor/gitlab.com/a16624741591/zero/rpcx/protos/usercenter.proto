@@ -1,0 +1,19 @@
+syntax ="proto3";
+package pb ;
+option go_package=".;pb";
+
+import "protos/grpc_base.proto";
+
+
+message GetOkrRequest{
+  string Keyword=1 ;
+  UserContext Context = 3;
+}
+
+message GetOkrResponse{
+  string Name =1;
+}
+
+service Okr{
+  rpc GetOkr(GetOkrRequest) returns(Response) ;
+}

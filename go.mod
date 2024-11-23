@@ -23,8 +23,6 @@ require (
 	gorm.io/gorm v1.25.12
 )
 
-replace golang.org/x/text v0.14.0 => ./tem_mod/text
-
 require (
 	github.com/963204765/httpclient v0.0.0-20201210072243-522af3cdfe83 // indirect
 	github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible // indirect
