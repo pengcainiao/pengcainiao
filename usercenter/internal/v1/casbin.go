@@ -1,6 +1,7 @@
 package v1
 
 import (
+	casbin "github.com/casbin/casbin/v2"
 	"github.com/casbin/casbin/v2/model"
 	"github.com/google/martian/log"
 	"go.uber.org/zap"

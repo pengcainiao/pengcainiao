@@ -12,6 +12,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	uuid "github.com/satori/go.uuid"
 	"github.com/scylladb/go-set/strset"
+	"gopkg.in/square/go-jose.v2"
 )
 
 type RedisConfig struct {
