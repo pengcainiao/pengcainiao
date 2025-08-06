@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"gitlab.com/a16624741591/zero/core/logx"
 	"gitlab.com/a16624741591/zero/rest/httprouter"
@@ -57,6 +58,8 @@ func (o ObjectiveController) TestRedis(c *gin.Context) {
 		logx.NewTraceLogger(c).Err(err).Msg("TestRedis fail")
 		return
 	}
+
+	fmt.Println(res)
 
 	httprouter.ResponseJSONContent(c, httprouter.Success(map[string]interface{}{
 		"data": res,
